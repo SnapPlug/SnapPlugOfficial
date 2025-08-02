@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SnapPlug - AI 자동화 시스템
 
-## Getting Started
+2주 안에 만나는 나만의 AI 자동화 시스템
 
-First, run the development server:
+## 🚀 프로젝트 소개
 
+SnapPlug는 대표님만을 위한 맞춤형 AI 자동화 시스템을 제공하는 플랫폼입니다. 반복적인 업무를 AI가 대신 처리하여 대표님의 시간을 절약하고, 더 중요한 일에 집중할 수 있도록 도와줍니다.
+
+## ✨ 주요 기능
+
+- **맞춤형 AI 자동화**: 대표님의 업무 프로세스에 맞는 개인화된 자동화
+- **2주 완성**: 빠른 구현으로 즉시 효과 체감
+- **다양한 아바타 시스템**: 고객 후기용 개성 있는 아바타 생성
+- **반응형 디자인**: 모바일/데스크탑 최적화
+- **현대적인 UI/UX**: ShadCN 컴포넌트 기반의 깔끔한 인터페이스
+
+## 🛠 기술 스택
+
+- **Frontend**: Next.js 15, React, TypeScript
+- **Styling**: Tailwind CSS, ShadCN UI
+- **Animation**: Framer Motion, Lucide React
+- **Deployment**: Vercel
+- **Version Control**: Git
+
+## 📦 설치 및 실행
+
+### 필수 요구사항
+- Node.js 18.0.0 이상
+- npm 또는 yarn
+
+### 설치 방법
+
+1. **저장소 클론**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/[username]/snapplug.git
+cd snapplug
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **의존성 설치**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **개발 서버 실행**
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **브라우저에서 확인**
+```
+http://localhost:3000
+```
 
-## Learn More
+## 🏗 빌드 및 배포
 
-To learn more about Next.js, take a look at the following resources:
+### 프로덕션 빌드
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Vercel 배포
+```bash
+npx vercel --prod
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 프로젝트 구조
 
-## Deploy on Vercel
+```
+snapplug/
+├── public/                 # 정적 파일
+│   ├── images/            # 이미지 파일
+│   └── favicon.svg        # 파비콘
+├── src/
+│   ├── app/              # Next.js App Router
+│   │   ├── page.tsx      # 메인 페이지
+│   │   ├── about/        # 소개 페이지
+│   │   ├── contact/      # 문의 페이지
+│   │   └── api/          # API 라우트
+│   ├── components/       # React 컴포넌트
+│   │   ├── ui/          # ShadCN UI 컴포넌트
+│   │   └── blocks/      # 페이지 블록 컴포넌트
+│   └── lib/             # 유틸리티 함수
+└── tailwind.config.js   # Tailwind 설정
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 주요 컴포넌트
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **HeroSection**: 메인 랜딩 섹션
+- **PortfolioSection**: 포트폴리오 및 실적
+- **TestimonialsSection**: 고객 후기
+- **ServicesSection**: 서비스 소개
+- **PricingSection**: 가격 정보
+
+## 🔧 환경 설정
+
+### 환경 변수
+```env
+# .env.local
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
+```
+
+## 📈 성능 최적화
+
+- **정적 사이트 생성**: 모든 페이지가 사전 렌더링
+- **이미지 최적화**: Next.js Image 컴포넌트 사용
+- **코드 분할**: 자동 코드 분할로 빠른 로딩
+- **CDN**: Vercel 글로벌 CDN 활용
+
+## 🤝 기여하기
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 라이선스
+
+이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
+
+## 📞 문의
+
+- **이메일**: hello@snapplug.app
+- **웹사이트**: https://snapplug.app
+
+## 🙏 감사의 말
+
+- [ShadCN](https://ui.shadcn.com/) - 아름다운 UI 컴포넌트
+- [Vercel](https://vercel.com/) - 빠른 배포 플랫폼
+- [Next.js](https://nextjs.org/) - 강력한 React 프레임워크
+- [Tailwind CSS](https://tailwindcss.com/) - 유틸리티 우선 CSS 프레임워크
+
+---
+
+**SnapPlug** - AI는 반복을, 대표님은 중요한 일을 하세요.
