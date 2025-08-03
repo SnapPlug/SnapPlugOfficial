@@ -63,6 +63,7 @@ import { TestimonialsMarquee } from "@/components/ui/testimonials-marquee";
 
 import Link from "next/link";
 import { generateAvatar, generatePersonaAvatar, generateBoringAvatar } from "@/lib/utils";
+import { trackConsultationClick, trackScrollDepth } from "@/components/analytics";
 
 // SlidingNumberBasic 컴포넌트
 function SlidingNumberBasic() {
@@ -253,6 +254,12 @@ function Header() {
 
 // HeroSection: 메인 랜딩(첫 화면) 섹션
 function HeroSection() {
+  // 스크롤 깊이 추적
+  useEffect(() => {
+    const cleanup = trackScrollDepth();
+    return cleanup;
+  }, []);
+
   return (
     <section className="relative min-h-400 flex items-center justify-center overflow-hidden bg-white dark:bg-gray-900">
             {/* Mobile layout - 3D 배경에 텍스트 오버레이 */}
@@ -297,7 +304,11 @@ function HeroSection() {
           
           <div className="flex flex-col gap-3">
             <Link href="/contact">
-              <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-full w-full sm:w-auto">
+              <Button 
+                size="sm" 
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-full w-full sm:w-auto"
+                onClick={trackConsultationClick}
+              >
                 상담 일정 잡기
                 <ArrowRight className="ml-2 h-3 w-3" />
               </Button>
@@ -339,7 +350,11 @@ function HeroSection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/contact">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-full w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-full w-full sm:w-auto"
+                onClick={trackConsultationClick}
+              >
               상담 일정 잡기
                 <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
