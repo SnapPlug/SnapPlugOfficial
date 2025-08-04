@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 성능 최적화된 애니메이션 */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -47,7 +48,11 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    /* 애니메이션 변수 추가 */
+    --animate-marquee: marquee var(--duration) infinite linear;
+    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   }
+  
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -74,106 +79,175 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-  .theme {
-    --animate-marquee: marquee var(--duration) infinite linear;
-    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
-  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    /* 성능 최적화 */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* 접근성 개선 */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  
+  /* 스크린 리더 지원 */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 
-.cpu-architecture {
-  offset-anchor: 10px 0px;
-  animation: animation-path;
-  animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(0.75, -0.01, 0, 0.99);
-}
-
-.cpu-line-1 {
-  offset-path: path("M 10 20 h 79.5 q 5 0 5 5 v 30");
-  animation-duration: 5s;
-  animation-delay: 1s;
-}
-
-.cpu-line-2 {
-  offset-path: path("M 180 10 h -69.7 q -5 0 -5 5 v 40");
-  animation-delay: 6s;
-  animation-duration: 2s;
-}
-
-.cpu-line-3 {
-  offset-path: path("M 130 20 v 21.8 q 0 5 -5 5 h -25");
-  animation-delay: 4s;
-  animation-duration: 6s;
-}
-
-.cpu-line-4 {
-  offset-path: path("M 170 80 v -21.8 q 0 -5 -5 -5 h -65");
-  animation-delay: 3s;
-  animation-duration: 3s;
-}
-
-.cpu-line-5 {
-  offset-path: path(
-    "M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -35"
-  );
-  animation-delay: 9s;
-  animation-duration: 4s;
-}
-
-.cpu-line-6 {
-  offset-path: path("M 94.8 95 v -46");
-  animation-delay: 3s;
-  animation-duration: 7s;
-}
-
-.cpu-line-7 {
-  offset-path: path(
-    "M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 28"
-  );
-  animation-delay: 4s;
-  animation-duration: 4s;
-}
-
-.cpu-line-8 {
-  offset-path: path("M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 35");
-  animation-delay: 3s;
-  animation-duration: 3s;
-}
-
-@keyframes animation-path {
-  0% {
-    offset-distance: 0%;
+@layer components {
+  /* CPU 아키텍처 애니메이션 - 성능 최적화 */
+  .cpu-architecture {
+    offset-anchor: 10px 0px;
+    animation: animation-path;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out; /* 복잡한 cubic-bezier 대신 간단한 easing */
+    will-change: transform; /* 성능 최적화 */
   }
-  100% {
-    offset-distance: 100%;
+
+  .cpu-line-1 {
+    offset-path: path("M 10 20 h 79.5 q 5 0 5 5 v 30");
+    animation-duration: 5s;
+    animation-delay: 1s;
   }
-}
 
-/* 3D Flip Card Styles */
-.perspective {
-  perspective: 1000px;
-}
+  .cpu-line-2 {
+    offset-path: path("M 180 10 h -69.7 q -5 0 -5 5 v 40");
+    animation-delay: 6s;
+    animation-duration: 2s;
+  }
 
-.transform-style-preserve-3d {
-  transform-style: preserve-3d;
-}
+  .cpu-line-3 {
+    offset-path: path("M 130 20 v 21.8 q 0 5 -5 5 h -25");
+    animation-delay: 4s;
+    animation-duration: 6s;
+  }
 
-.backface-hidden {
-  backface-visibility: hidden;
-}
+  .cpu-line-4 {
+    offset-path: path("M 170 80 v -21.8 q 0 -5 -5 -5 h -65");
+    animation-delay: 3s;
+    animation-duration: 3s;
+  }
 
-.rotate-y-180 {
-  transform: rotateY(180deg);
-}
+  .cpu-line-5 {
+    offset-path: path(
+      "M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -35"
+    );
+    animation-delay: 9s;
+    animation-duration: 4s;
+  }
 
-.group:hover .group-hover\:rotate-y-180 {
-  transform: rotateY(180deg);
+  .cpu-line-6 {
+    offset-path: path("M 94.8 95 v -46");
+    animation-delay: 3s;
+    animation-duration: 7s;
+  }
+
+  .cpu-line-7 {
+    offset-path: path(
+      "M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 28"
+    );
+    animation-delay: 4s;
+    animation-duration: 4s;
+  }
+
+  .cpu-line-8 {
+    offset-path: path("M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 35");
+    animation-delay: 3s;
+    animation-duration: 3s;
+  }
+
+  @keyframes animation-path {
+    0% {
+      offset-distance: 0%;
+    }
+    100% {
+      offset-distance: 100%;
+    }
+  }
+
+  /* 3D Flip Card Styles - 성능 최적화 */
+  .perspective {
+    perspective: 1000px;
+    transform-style: preserve-3d; /* GPU 가속 활성화 */
+  }
+
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  .group:hover .group-hover\:rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  /* 반응형 개선 */
+  @media (max-width: 768px) {
+    .cpu-architecture {
+      animation-duration: 3s; /* 모바일에서 더 빠른 애니메이션 */
+    }
+    
+    .perspective {
+      perspective: 500px; /* 모바일에서 더 가벼운 3D 효과 */
+    }
+  }
+  
+  /* 다크모드 최적화 */
+  @media (prefers-color-scheme: dark) {
+    .cpu-architecture {
+      filter: brightness(1.2); /* 다크모드에서 더 밝게 */
+    }
+  }
+  
+  /* 접근성 개선 - 고대비 모드 */
+  @media (prefers-contrast: high) {
+    .cpu-architecture {
+      filter: contrast(1.5);
+    }
+  }
+  
+  /* 모션 감소 설정 지원 */
+  @media (prefers-reduced-motion: reduce) {
+    .cpu-architecture,
+    .cpu-line-1,
+    .cpu-line-2,
+    .cpu-line-3,
+    .cpu-line-4,
+    .cpu-line-5,
+    .cpu-line-6,
+    .cpu-line-7,
+    .cpu-line-8 {
+      animation: none;
+    }
+    
+    .group:hover .group-hover\:rotate-y-180 {
+      transform: none;
+    }
+  }
 }
