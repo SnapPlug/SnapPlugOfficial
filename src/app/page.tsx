@@ -46,6 +46,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { motion } from 'motion/react';
 import { SlidingNumber } from '@/components/ui/sliding-number';
+import Script from 'next/script';
 
 import { FeaturesSectionWithHoverEffects } from "@/components/blocks/feature-section-with-hover-effects";
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
@@ -65,6 +66,35 @@ import { TestimonialsMarquee } from "@/components/ui/testimonials-marquee";
 import Link from "next/link";
 import { generateAvatar, generatePersonaAvatar, generateBoringAvatar } from "@/lib/utils";
 import { trackConsultationClick, trackScrollDepth } from "@/components/analytics";
+
+// SEO를 위한 구조화된 데이터
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "SnapPlug",
+  "description": "AI 자동화 시스템 전문 기업",
+  "url": "https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app",
+  "logo": "https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app/images/SnapPlugLogo.png",
+  "sameAs": [
+    "https://github.com/SnapPlug"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "availableLanguage": "Korean"
+  },
+  "service": {
+    "@type": "Service",
+    "name": "AI 자동화 시스템 개발",
+    "description": "2주 안에 완성되는 맞춤형 AI 자동화 시스템",
+    "provider": {
+      "@type": "Organization",
+      "name": "SnapPlug"
+    },
+    "areaServed": "KR",
+    "serviceType": "AI 자동화 솔루션"
+  }
+};
 
 // SlidingNumberBasic 컴포넌트
 function SlidingNumberBasic() {
@@ -729,7 +759,9 @@ export default function HomePage() {
         <PricingSection />
         <Footer />
       </main>
-      
+      <Script id="structured-data" type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </Script>
     </ThemeProvider>
   );
 }

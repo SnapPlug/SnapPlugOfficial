@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { 
   Users, 
   Target, 
@@ -233,10 +234,13 @@ export function AboutUsSection({ className }: AboutUsSectionProps) {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
                 whileTap={{ scale: 0.98 }}
               >
-                <img
+                <Image
                   src="/images/SnapPlugLogo.png"
                   alt="SnapPlug AI Automation"
+                  width={300}
+                  height={300}
                   className="w-full h-full object-cover"
+                  priority
                 />
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent flex items-end justify-center p-2 sm:p-4"

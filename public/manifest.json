@@ -1,0 +1,21 @@
+{
+  "name": "SnapPlug - AI 자동화 시스템",
+  "short_name": "SnapPlug",
+  "description": "2주 안에 완성되는 맞춤형 AI 자동화 시스템",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "ko",
+  "dir": "ltr"
+} 
