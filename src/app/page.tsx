@@ -735,7 +735,9 @@ function Footer() {
           <p className="text-gray-400 text-sm">
             © 2025 SnapPlug. All rights reserved.
           </p>
-          
+          <p className="text-gray-400 text-sm">
+            <Link href="/presentation">미팅 자료 보러가기</Link>
+          </p>          
         </div>
       </div>
     </footer>
