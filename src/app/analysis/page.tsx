@@ -150,7 +150,6 @@ function HeroSection() {
     
     // 연간 자동화 수익 계산
     const calculatedRevenue = hourlyRevenue * automationHours * monthlyWorkDays * 12;
-    
     setYearlyAutomationRevenue(calculatedRevenue);
     setAnalysisResult(`
 ${calculatedRevenue.toLocaleString()}만원
