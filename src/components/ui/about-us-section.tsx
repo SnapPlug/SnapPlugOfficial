@@ -173,7 +173,8 @@ export function AboutUsSection({ className }: AboutUsSectionProps) {
             AI 자동화 업체를 고르는 기준
           </motion.span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-center leading-tight px-2">
-            대표님은 퇴근하세요. 이젠 AI가 출근합니다.
+            <span className="block sm:inline">대표님은 퇴근하세요.</span>
+            <span className="block sm:inline">이젠 AI가 출근합니다.</span>
           </h1>
           <motion.div
             className="w-16 sm:w-24 h-0.5 sm:h-1 bg-blue-500"
@@ -193,7 +194,8 @@ export function AboutUsSection({ className }: AboutUsSectionProps) {
         >
           자동화를 만들 줄 아는 사람은 많아요.
           <br />
-          그런데 대표님 상황까지 함께 설계할 수 있는 사람은 드뭅니다.
+          <span className="block sm:inline">그런데 대표님 상황까지 함께 </span>
+          <span className="block sm:inline">설계할 수 있는 사람은 드뭅니다.</span>
           <br />
           이런 기준으로 선택해보세요.
         </motion.p>
