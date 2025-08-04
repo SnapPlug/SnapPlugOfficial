@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AboutUsSection } from "@/components/ui/about-us-section";
 import { Separator } from "@/components/ui/separator";
 import { Spotlight } from "@/components/ui/spotlight";
 import { SplineScene } from "@/components/ui/splite";
@@ -464,9 +465,6 @@ function PortfolioSection() {
 }
 
 
-
-
-
 // 단계별 로드맵 섹션
 function RoadmapSection() {
   const steps = [
@@ -726,6 +724,7 @@ export default function HomePage() {
         <PortfolioSection />
         <TestimonialsSection />
         <ServicesSection />
+        <AboutUsSection />
         <RoadmapSection />
         <PricingSection />
         <Footer />
