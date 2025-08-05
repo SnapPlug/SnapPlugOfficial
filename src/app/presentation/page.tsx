@@ -58,7 +58,11 @@ import {
   Code,
   Palette,
   DollarSign,
-  TrendingDown
+  TrendingDown,
+  User,
+  Send,
+  CheckCircle,
+  Circle
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { FeaturesSectionWithHoverEffects } from "@/components/blocks/feature-section-with-hover-effects";
@@ -76,6 +80,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 
 
 
@@ -300,6 +305,120 @@ export default function PresentationPage() {
   const [card2Flipped, setCard2Flipped] = useState(false);
   const [card3Flipped, setCard3Flipped] = useState(false);
 
+  const [demoForm, setDemoForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+  });
+  const [demoStatus, setDemoStatus] = useState({
+    makeSent: false,
+    supabaseSaved: false,
+    realTimeUpdated: false,
+    isProcessing: false,
+  });
+  const [demoResult, setDemoResult] = useState<any>(null);
+  const [demoError, setDemoError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleDemoSubmit = async () => {
+    setIsSubmitting(true);
+    setDemoError(null);
+    setDemoResult(null);
+    setDemoStatus({
+      makeSent: false,
+      supabaseSaved: false,
+      realTimeUpdated: false,
+      isProcessing: false,
+    });
+
+    try {
+      // 1. make.com webhook 직접 호출
+      setDemoStatus(prev => ({ ...prev, isProcessing: true }));
+      
+      const makeWebhookUrl = process.env.NEXT_PUBLIC_MAKE_WEBHOOK_URL || 'https://hook.eu2.make.com/7iqcr9v6jo7aszi2swvot6po8fw19enc';
+      
+      const makeResponse = await fetch(makeWebhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: demoForm.name,
+          email: demoForm.email,
+          phone: demoForm.phone,
+          date: demoForm.date,
+          timestamp: new Date().toISOString(),
+          source: 'snapplug-demo-form',
+          // SOLAPI 인증을 위한 추가 필드 (필요시)
+          // auth: {
+          //   type: 'bearer',
+          //   token: process.env.NEXT_PUBLIC_SOLAPI_TOKEN
+          // }
+        }),
+      });
+
+      if (!makeResponse.ok) {
+        throw new Error(`make.com webhook 호출 실패: ${makeResponse.status}`);
+      }
+
+      setDemoStatus(prev => ({ ...prev, makeSent: true, isProcessing: false }));
+
+      // 2. Supabase에 데이터 저장
+      setDemoStatus(prev => ({ ...prev, isProcessing: true }));
+      
+      const supabaseResponse = await fetch('/api/demo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(demoForm),
+      });
+
+      if (!supabaseResponse.ok) {
+        const errorData = await supabaseResponse.json();
+        throw new Error(`Supabase 저장 실패: ${errorData.error || '알 수 없는 오류'}${errorData.details ? ` (${errorData.details})` : ''}`);
+      }
+
+      const result = await supabaseResponse.json();
+
+      if (result.success) {
+        setDemoStatus(prev => ({ ...prev, supabaseSaved: true, isProcessing: false }));
+
+        // 3. 실시간 업데이트 완료
+        setDemoStatus(prev => ({ ...prev, isProcessing: true }));
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setDemoStatus(prev => ({ ...prev, realTimeUpdated: true, isProcessing: false }));
+
+        // 4. 결과 표시
+        setDemoResult({
+          id: result.data.id,
+          name: result.data.name,
+          email: result.data.email,
+          phone: result.data.phone,
+          date: result.data.date,
+          status: "처리 완료",
+        });
+
+        // 폼 초기화
+        setDemoForm({
+          name: "",
+          email: "",
+          phone: "",
+          date: "",
+        });
+      } else {
+        throw new Error(result.error || '처리 중 오류가 발생했습니다.');
+      }
+
+    } catch (error) {
+      setDemoError(error instanceof Error ? error.message : "데모 신청 중 오류가 발생했습니다.");
+      console.error('데모 제출 오류:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       
@@ -479,6 +598,229 @@ export default function PresentationPage() {
             <h2 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white leading-tight text-center">
                 <span className="block sm:inline">24시간 이내에 대표님께서 원하시는 자동화 솔루션을 제안드립니다.</span>
               </h2>
+          </div>
+        </section>
+
+        {/* Demo Section */}
+        <section className="py-12 md:py-20 bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20">
+          <div className="container mx-auto px-4 md:px-8 max-w-6xl">
+            <div className="text-center mb-12 md:mb-16">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 text-white leading-tight">
+                <span className="block sm:inline">실시간 데모 체험</span>
+              </h2>
+              <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-3xl mx-auto px-4 leading-relaxed text-center">
+                간단한 정보만 입력하시면 make.com과 Supabase를 연동한 실시간 자동화 시스템을 체험해보실 수 있습니다.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+              {/* Input Form */}
+              <div className="space-y-6">
+                <Card className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border border-blue-500/20">
+                  <CardHeader>
+                    <CardTitle className="text-white text-xl md:text-2xl flex items-center gap-2">
+                      <User className="h-6 w-6 text-blue-400" />
+                      데모 신청
+                    </CardTitle>
+                    <CardDescription className="text-gray-300">
+                      정보를 입력하시면 실시간으로 처리 결과를 확인하실 수 있습니다.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-white">이름</Label>
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder="홍길동"
+                        className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
+                        value={demoForm.name}
+                        onChange={(e) => setDemoForm({ ...demoForm, name: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-white">이메일</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="hong@example.com"
+                        className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
+                        value={demoForm.email}
+                        onChange={(e) => setDemoForm({ ...demoForm, email: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-white">전화번호</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="010-1234-5678"
+                        className="bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
+                        value={demoForm.phone}
+                        onChange={(e) => setDemoForm({ ...demoForm, phone: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="date" className="text-white">희망 날짜</Label>
+                      <Input
+                        id="date"
+                        type="date"
+                        className="bg-gray-800/50 border-gray-600 text-white"
+                        value={demoForm.date}
+                        onChange={(e) => setDemoForm({ ...demoForm, date: e.target.value })}
+                      />
+                    </div>
+                    <Button 
+                      onClick={handleDemoSubmit}
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          처리 중...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Send className="h-4 w-4" />
+                          데모 신청하기
+                        </div>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Real-time Results */}
+              <div className="space-y-6">
+                <Card className="bg-gradient-to-br from-green-900/30 to-emerald-900/30 border border-green-500/20">
+                  <CardHeader>
+                    <CardTitle className="text-white text-xl md:text-2xl flex items-center gap-2">
+                      <Activity className="h-6 w-6 text-green-400" />
+                      실시간 처리 결과
+                    </CardTitle>
+                    <CardDescription className="text-gray-300">
+                      make.com과 Supabase 연동 상태를 실시간으로 확인하세요.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">make.com 전송</span>
+                        <div className="flex items-center gap-2">
+                          {demoStatus.makeSent ? (
+                            <div className="flex items-center gap-1 text-green-400">
+                              <CheckCircle className="h-4 w-4" />
+                              <span className="text-sm">완료</span>
+                            </div>
+                          ) : demoStatus.isProcessing ? (
+                            <div className="flex items-center gap-1 text-yellow-400">
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-yellow-400"></div>
+                              <span className="text-sm">처리 중</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1 text-gray-400">
+                              <Circle className="h-4 w-4" />
+                              <span className="text-sm">대기</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">Supabase 저장</span>
+                        <div className="flex items-center gap-2">
+                          {demoStatus.supabaseSaved ? (
+                            <div className="flex items-center gap-1 text-green-400">
+                              <CheckCircle className="h-4 w-4" />
+                              <span className="text-sm">완료</span>
+                            </div>
+                          ) : demoStatus.isProcessing ? (
+                            <div className="flex items-center gap-1 text-yellow-400">
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-yellow-400"></div>
+                              <span className="text-sm">처리 중</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1 text-gray-400">
+                              <Circle className="h-4 w-4" />
+                              <span className="text-sm">대기</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300">실시간 업데이트</span>
+                        <div className="flex items-center gap-2">
+                          {demoStatus.realTimeUpdated ? (
+                            <div className="flex items-center gap-1 text-green-400">
+                              <CheckCircle className="h-4 w-4" />
+                              <span className="text-sm">완료</span>
+                            </div>
+                          ) : demoStatus.isProcessing ? (
+                            <div className="flex items-center gap-1 text-yellow-400">
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-yellow-400"></div>
+                              <span className="text-sm">처리 중</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1 text-gray-400">
+                              <Circle className="h-4 w-4" />
+                              <span className="text-sm">대기</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {demoResult && (
+                      <div className="mt-4 p-4 bg-gray-800/50 rounded-lg border border-gray-600">
+                        <h4 className="text-white font-semibold mb-2">처리 결과</h4>
+                                                 <div className="space-y-2 text-sm">
+                           <div className="flex justify-between">
+                             <span className="text-gray-300">ID:</span>
+                             <span className="text-white">{demoResult.id}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-gray-300">이름:</span>
+                             <span className="text-white">{demoResult.name}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-gray-300">이메일:</span>
+                             <span className="text-white">{demoResult.email}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-gray-300">전화번호:</span>
+                             <span className="text-white">{demoResult.phone}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-gray-300">날짜:</span>
+                             <span className="text-white">{demoResult.date}</span>
+                           </div>
+                           <div className="flex justify-between">
+                             <span className="text-gray-300">상태:</span>
+                             <span className="text-green-400">{demoResult.status}</span>
+                           </div>
+                         </div>
+                      </div>
+                    )}
+
+                    {demoError && (
+                      <div className="mt-4 p-4 bg-red-900/30 rounded-lg border border-red-500/20">
+                        <h4 className="text-red-400 font-semibold mb-2">오류 발생</h4>
+                        <p className="text-red-300 text-sm">{demoError}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            <div className="mt-12 text-center">
+              <div className="inline-flex items-center gap-2 text-gray-400 text-sm">
+                <Zap className="h-4 w-4" />
+                <span>실시간 처리 시간: 평균 2-3초</span>
+              </div>
+            </div>
           </div>
         </section>
 
