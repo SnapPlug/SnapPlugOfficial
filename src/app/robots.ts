@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/_next/', '/admin/'],
     },
-    sitemap: 'https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app/sitemap.xml',
+    sitemap: 'https://snapplug.app/sitemap.xml',
   }
 } 

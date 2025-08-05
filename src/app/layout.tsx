@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "SnapPlug - AI 자동화 시스템 | 2주 안에 완성되는 맞춤형 자동화",
+    default: "SnapPlug - AI 자동화 시스템",
     template: "%s | SnapPlug"
   },
   description: "대표님은 퇴근하세요. 이젠 AI가 출근합니다. 2주 안에 완성되는 맞춤형 AI 자동화 시스템으로 반복 업무를 자동화하고 시간을 절약하세요.",
@@ -40,15 +40,15 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app'),
+  metadataBase: new URL('https://snapplug.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
-    url: 'https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app',
-    title: 'SnapPlug - AI 자동화 시스템 | 2주 안에 완성되는 맞춤형 자동화',
+    url: 'https://snapplug.app',
+    title: 'SnapPlug - AI 자동화 시스템',
     description: '대표님은 퇴근하세요. 이젠 AI가 출근합니다. 2주 안에 완성되는 맞춤형 AI 자동화 시스템으로 반복 업무를 자동화하고 시간을 절약하세요.',
     siteName: 'SnapPlug',
     images: [
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'SnapPlug - AI 자동화 시스템',
-    description: '2주 안에 완성되는 맞춤형 AI 자동화 시스템',
+    description: '대표님은 퇴근하세요. 이젠 AI가 출근합니다.',
     images: ['/images/SnapPlugLogo.png'],
   },
   robots: {
@@ -100,6 +100,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <meta name="naver-site-verification" content="6fc857ece3cbc2baa328e15a230d2122c46041ca" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app'
+  const baseUrl = 'https://snapplug.app'
   
   return [
     {

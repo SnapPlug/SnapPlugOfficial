@@ -73,8 +73,8 @@ const structuredData = {
   "@type": "Organization",
   "name": "SnapPlug",
   "description": "AI 자동화 시스템 전문 기업",
-  "url": "https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app",
-  "logo": "https://snapplug-oouowsxsn-jasonjeongs-projects.vercel.app/images/SnapPlugLogo.png",
+  "url": "https://snapplug.app",
+  "logo": "https://snapplug.app/images/SnapPlugLogo.png",
   "sameAs": [
     "https://github.com/SnapPlug"
   ],
